@@ -1,1 +1,1 @@
-"Wilkommen im GitHub von LuEMa" 
+Wilkommen im GitHub von LuEMa
