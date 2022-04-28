@@ -1,7 +1,7 @@
 <script>
     export let background_color = "#282828"
     export let text_color = "#FFFFFF"
-    export let value;
+    export let value = undefined;
 
 </script>
 <style>
@@ -60,7 +60,7 @@
         <option value={null} selected disabled hidden>Bitte wählen...</option>
     
         <slot>
-            <option>Keine Auswahl vorhanden...</option>
+            <option value="none">Keine Auswahl vorhanden...</option>
         </slot>    
     </select>
 </div>

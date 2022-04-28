@@ -2,9 +2,12 @@
 // @ts-nocheck
 
   import { browser } from '$app/env';
+  import {currentUser} from "../stores/stores.js"
+
+  //Components
+  import Card from "../components/util/card.svelte"
   import Navbar from "../components/nav/navbar.svelte";
   import Slider from '@bulatdashiev/svelte-slider';
-  import {currentUser} from "../stores/stores.js"
 
   let value;
 
@@ -108,8 +111,13 @@
   --thumb-bg: #5784fd;
 }
 
+  :global(html) {
+    background-color: #F8F8F8;
+  }
+
   #page_container {
       margin: 3rem 0 7rem 0;
+      height: calc(100vh - 12rem);
   }
 
   :global(p) {
@@ -142,44 +150,47 @@
 </svelte:head>
 
 {#if browser}
-  <div id="page_container">
-    <Navbar active=2/>
-    <button on:click={ handleClick }>
-      Nachladen
-    </button>
-
-
-    {#await submit}
-      lädt...
-    {:then} 
-      {#if current_meal }
-
-        <p>{current_meal.id}</p>
-        <p>{current_meal.title}</p>
-        <p>{current_meal.date}</p>
-        
-        <div id="test">
-          <Slider bind:value={rateInput}>
-            <span style="font-size: 20px;">❤️</span>
-          </Slider>
-        </div>
-        
-        <button on:click={handleVote}>Send</button>
-
-        <br>
-        <br>
-        <br>
-        <br>
-        
-        <button on:click={handleSkip} disabled={fetchData.length == 1}>Next</button>
-
-        
-        
-        
-      {:else}
-        Es gibt nichts zum bewerten.
-      {/if}
-    {/await}
+  
+    <div id="page_container">
+      <Navbar active=2/>
+      
+  
+      <Card height={"100%"}>
+        <button on:click={ handleClick }>
+          Nachladen
+        </button>
+      {#await submit}
+        lädt...
+      {:then} 
+        {#if current_meal }
+  
+          <p>{current_meal.id}</p>
+          <p>{current_meal.title}</p>
+          <p>{current_meal.date}</p>
+          
+          <div id="test">
+            <Slider bind:value={rateInput}>
+              <span style="font-size: 20px;">❤️</span>
+            </Slider>
+          </div>
+          
+          <button on:click={handleVote}>Send</button>
+  
+          <br>
+          <br>
+          <br>
+          <br>
+          
+          <button on:click={handleSkip} disabled={fetchData.length == 1}>Next</button>
+  
+          
+          
+          
+        {:else}
+          Es gibt nichts zum bewerten.
+        {/if}
+      {/await}
+    </Card>
   </div>
 {/if}
 

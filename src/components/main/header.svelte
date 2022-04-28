@@ -2,6 +2,8 @@
     export let username = null;
     export let id;
 
+    let image;
+
 </script>
 
 <style>
@@ -43,7 +45,12 @@
 
 
 <div id="header_container">
-    <img id="profile_image" src={`/user_images/${id}.jpg`} alt=""/>
+    {#await image}
+        &nbsp;
+    {:then _}
+        <img id="profile_image" src={`../../../static/user_images/${id}.jpg`} alt=""/>  
+    {/await}
+    
     <div id="text_container">
         <p class="welcome">WILKOMMEN</p>
         <p class="username">{username}</p>

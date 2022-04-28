@@ -22,8 +22,8 @@ import Header from "../main/header.svelte";
         height: 7rem;
         padding: 0.5rem;
         border-radius: 0.75rem;
-        -webkit-box-shadow: -1px 4px 10px 5px rgba(0,0,0,0.05); 
-        box-shadow: -1px 4px 10px 5px rgba(0,0,0,0.05);
+        -webkit-box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
         margin: 0 0 1rem 0;
     }
 

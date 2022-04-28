@@ -56,6 +56,11 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+
+:global(html) {
+    background-color: #F8F8F8;
+  }
+
 #page_container {
     display: flex;
     flex-direction: column;

@@ -34,6 +34,10 @@
     margin: 3rem 0 7rem 0;
   }
 
+  :global(html) {
+    background-color: #F8F8F8;
+  }
+
   :global(p) {
     font-family: 'Montserrat', sans-serif;
   }
@@ -63,7 +67,7 @@
 <div id="page_container">
   <Navbar active=1/>
 
-  <Header username={JSON.parse(user).name} id={JSON.parse(user).id}></Header>
+  <Header username={JSON.parse(user)?.name} id={JSON.parse(user)?.id}></Header>
   <div id="button_bar">
     <TinyButton text="Nachrichten" icon={AlertIcon}/>
     <TinyButton text="Optionen" icon={SettingsIcon}/>
