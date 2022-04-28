@@ -48,7 +48,7 @@
     {#await image}
         &nbsp;
     {:then _}
-        <img id="profile_image" src={`../../../static/user_images/${id}.jpg`} alt=""/>  
+        <img id="profile_image" src={`./user_images/${id}.jpg`} alt=""/>  
     {/await}
     
     <div id="text_container">

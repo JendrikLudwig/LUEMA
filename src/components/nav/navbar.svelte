@@ -1,7 +1,7 @@
 <script>
-    import HomeIcon from "../../../static/icons/ico_home.png"
-    import SearchIcon from "../../../static/icons/ico_search.png"
-    import VoteIcon from "../../../static/icons/ico_vote.png"
+    import HomeIcon from "../../assets/icons/ico_home.png"
+    import SearchIcon from "../../assets/icons/ico_search.png"
+    import VoteIcon from "../../assets/icons/ico_vote.png"
 
     export let active;
 

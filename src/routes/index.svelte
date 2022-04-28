@@ -9,9 +9,9 @@
     import Navbar from "../components/nav/navbar.svelte"
 
     //Icons
-    import AlertIcon from "../../static/icons/ico_alert.png"
-    import SettingsIcon from "../../static/icons/ico_settings.png"
-    import SignoutIcon from "../../static/icons/ico_signout.png"
+    import AlertIcon from "../assets/icons/ico_alert.png"
+    import SettingsIcon from "../assets/icons/ico_settings.png"
+    import SignoutIcon from "../assets/icons/ico_signout.png"
 
   
 

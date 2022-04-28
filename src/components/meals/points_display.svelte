@@ -1,7 +1,7 @@
 <script>
-    import GoodRate from "../../../static/icons/ico_rate_good.png"
-    import NeutralRate from "../../../static/icons/ico_rate_neutral.png"
-    import BadRate from "../../../static/icons/ico_rate_bad.png"
+    import GoodRate from "../../assets/icons/ico_rate_good.png"
+    import NeutralRate from "../../assets/icons/ico_rate_neutral.png"
+    import BadRate from "../../assets/icons/ico_rate_bad.png"
 
 
     export let points;
