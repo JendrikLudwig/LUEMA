@@ -1,8 +1,7 @@
 <script>
     import PointsDisplay from "./points_display.svelte";
 
-    import ArrowRight from "../../../static/icons/ico_arr_right.png"
-import Header from "../main/header.svelte";
+    import ArrowRight from "../../assets/icons/ico_arr_right.png"
 
     export let id;
     export let title = null;

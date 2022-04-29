@@ -9,13 +9,14 @@
     #cardcontainer {
         display: flex;
         flex-direction: column;
-        width: calc(100% - 1rem);
+        width: 100%;
         height: auto;
-        padding: 0.5rem;
         border-radius: 0.75rem;
         background-color: white;
         -webkit-box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px; 
         box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
+        overflow: hidden;
+        
     }
 
 </style>
