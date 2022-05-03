@@ -5,6 +5,8 @@
 
 
     export let points;
+    export let size;
+
 
     let icon;
     let color;
@@ -30,12 +32,12 @@
         
         case (points >= 20) && points:
             color = "unsatisfying_rate";
-            icon = NeutralRate
+            icon = BadRate
             break;
 
         case (points >= 0) && points:
             color = "bad_rate";
-            icon = NeutralRate
+            icon = BadRate
             break;
 
         default:
@@ -54,48 +56,49 @@
         flex-direction: row;
         align-items: center;
         justify-content: center;
-        width: 2.5rem;
-        height: 2.5rem;
+        width: 100%;
+        height: 100%;
         border-radius: 0.75rem;
-        padding: 0.5rem;
+        /*padding: 0.5rem;*/
     }
 
     #emojie {
-        height: 1.25rem;
-        margin: 0;
+        position: relative;
+        max-height: 1.75rem;
+        height: 40%;
     }
 
     #emojie img {
-        height: 1.25rem;
+        height: 100%;
     }
 
     .perfect_rate {
-        background-color: #FCC219;
+        background-color: #7DFC19;
     }
 
     .good_rate {
-        background-color: #FCC219;
+        background-color: #EAFC19;
     }
     .neutral_rate {
-        background-color: #FCE399;
+        background-color: #FCC219;
     }
     .unsatisfying_rate {
         background-color: #FCE399;
     }
 
     .bad_rate {
-        background-color: #E6E6E6;
+        background-color: #FC6B19;
 
     }
 
     .novote {
-        font-size: .7rem;
+        background-color: #E6E6E6;
     }
 
 
 </style>
 
-<div id="display_container" class={color}>
+<div id="display_container" class={color} style="--Size:{size}">
     {#if isNaN(points)}
         <span></span>
         <p class="novote">?</p>

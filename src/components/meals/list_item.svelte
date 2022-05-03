@@ -1,5 +1,6 @@
 <script>
     import PointsDisplay from "./points_display.svelte";
+    import RateIndicator from "./rate_indicator.svelte"
 
     import ArrowRight from "../../assets/icons/ico_arr_right.png"
 
@@ -107,6 +108,11 @@
         
     }
 
+    .indicator {
+        height: 3rem;
+        width: 3rem;
+    }
+
 </style>
 
 <a href="/meals/{id}">
@@ -123,7 +129,9 @@
             </div>
         </div>
         <div id="back_part">
-            <PointsDisplay points={Math.floor(rates.map(x => {return x.value}).reduce((a,b) => a + b,0)/rates.length)}></PointsDisplay>
+            <div class="indicator">
+                <RateIndicator points={Math.floor(rates.map(x => {return x.value}).reduce((a,b) => a + b,0)/rates.length)}></RateIndicator>
+            </div>
             <div id="more">
                 <p>Mehr</p>
                 <img src={ArrowRight} alt="">

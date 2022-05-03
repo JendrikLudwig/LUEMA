@@ -94,12 +94,13 @@
         padding: 0.5rem;  
     }
     
-    #rate_indicator {
+    #rate_indicator_container {
         display: flex;
         justify-content: flex-end;
-        width: 100%;
-        height: 100%;
+        width: 4.5rem;
+        height: 4.5rem;
     }
+
 
     #meal_text {
         height: auto;
@@ -152,8 +153,8 @@
 <div id="meal_card_container" >
     <Card>
         <div id="meal_banner" class={(imageExists(`../meal_images/${mealData.id}.jpg`)) ? "has_banner" : "no_banner"} style="--Image:url({`../meal_images/${mealData.id}.jpg`})">
-            <div id="rate_indicator">
-                <RateIndicator points={calcScore()}></RateIndicator>
+            <div id="rate_indicator_container">
+                <RateIndicator points={calcScore()} size={"2.5rem"}></RateIndicator>
             </div>
 
 
