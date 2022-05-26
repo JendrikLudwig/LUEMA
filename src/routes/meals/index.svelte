@@ -25,6 +25,7 @@
     import { browser } from '$app/env';
     import ListItem from '../../components/meals/list_item.svelte';
     import Navbar from '../../components/nav/navbar.svelte';
+    import PageContainer from "../../components/util/page_container.svelte"
 
     export let meals;
     console.log(meals);
@@ -35,9 +36,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
   
-    #page_container {
-      margin: 3rem 0 7rem 0;
-    }
+
 
     
     :global(body) {
@@ -59,7 +58,7 @@
 {#if browser}
 
 
-<div id="page_container">
+<PageContainer>
     <Navbar active=0/>
 
     {#each meals as meal}
@@ -75,7 +74,7 @@
 
     <button on:click={() => goto("/")}>Zurück</button>
 
-</div>
+</PageContainer>
 
 {/if}
 

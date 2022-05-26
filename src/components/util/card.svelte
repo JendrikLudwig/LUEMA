@@ -10,7 +10,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        height: auto;
+        height: 100%;
         border-radius: 0.75rem;
         background-color: white;
         -webkit-box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px; 

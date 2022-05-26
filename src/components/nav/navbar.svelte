@@ -23,6 +23,7 @@
         margin:  0 0 1rem 0 ;
         padding: 1rem 2rem;
         pointer-events: all;
+        z-index: 100;
     }
 
     #field_home {

@@ -21,14 +21,20 @@
 
     //Components
     import Navbar from '../../components/nav/navbar.svelte';
-    import MealCard from "../../components/meals/meal_card.svelte"
+    import MealCard2 from "../../components/meals/meal_card2.svelte"
+    import PageContainer from "../../components/util/page_container.svelte"
 
     export let mealData;
     console.log(mealData);
     let acUser;
 
+    let card_open = false;
 
     currentUser.subscribe(val => acUser = val);
+
+    function toggle_card() {
+      card_open = !card_open
+    }
     
     
 
@@ -38,11 +44,7 @@
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
-  
-    #page_container {
-      margin: 3rem 0 7rem 0;
-    }
-  
+   
     
     :global(body) {
         font-family: 'Montserrat', sans-serif;
@@ -50,6 +52,19 @@
     }
   
 
+    #mealcard_holder {
+      background-color: aqua;
+      min-height: calc(100vh - 9rem);
+
+    }
+
+    .open {
+      height: 100%;
+    }
+
+    .closed {
+      height: calc(100vh - 9rem);
+    }
   
   
   </style>
@@ -61,9 +76,11 @@
 
 {#if browser}
 
-<div id="page_container">
+<PageContainer>
   <Navbar active=0/>
-  <MealCard mealData={mealData}/>  
-</div>
+  <div id="mealcard_holder" class={(card_open) ? "open" : "closed"}>
+    <MealCard2 mealData={mealData} on:toggle={toggle_card} state={card_open}/>  
+  </div>
+</PageContainer>
 
 {/if}
