@@ -1,9 +1,14 @@
 <script>
+// @ts-nocheck
+
     import { browser } from '$app/env';
-    import { createEventDispatcher } from 'svelte';
+    import { createEventDispatcher, onMount } from 'svelte';
     import { currentUser } from "../../stores/stores.js"
 
+
     import RateIndicator from "../meals/rate_indicator.svelte"
+    import Slider from '@bulatdashiev/svelte-slider';
+    import StyledButton from "../util/button.svelte"
 
     export let mealData;
     export let state;
@@ -19,7 +24,8 @@
     let submit;
     let state_edit_vote = false;
 
-
+    //MealCardDescRef
+    let mealCardDesc;
 
     function openCard() {
         dispatch('toggle')
@@ -31,7 +37,6 @@
     }
 
     function checkUserVote() {
-        console.log(mealData);
         const voted = mealData.rates.filter( x => x.userId == JSON.parse(acUser).id);
         return voted?.[0];
     }
@@ -83,16 +88,27 @@
         let http = new XMLHttpRequest();
         http.open("Head",url,false);
         http.send()
-        console.log(http.status != 404);
-        return http.status != 404;
-        
+        return http.status != 404;   
     }
+
 
     if(browser) changeInput = checkUserVote()?.value;
 
+    function descOverflown(element) {
+        if(!element) return false  
+        if (element.clientHeight < element.scrollHeight) return true
+        else return false
+    }
 </script>
 
 <style>
+
+
+
+    :root {
+        --track-bg: #ebebeb;
+        --progress-bg:red;
+    }
     
     #meal_card_container {
         position: relative;
@@ -101,10 +117,10 @@
         height: 100%;
         width: 100%;
         border-radius: 0.75rem;
-        background-color: white;
         -webkit-box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px; 
         box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px;
-        overflow: hidden;
+        border-radius: 0.75rem;
+
     }
 
 
@@ -117,7 +133,10 @@
         background-size: cover;
         background-image: linear-gradient(rgba(0,0,0,0),rgba(0,0,0,1)), var(--Image);/* W3C */
         flex-direction: column;  
-        padding: 0.5rem;  
+        padding: 0.5rem;
+        overflow: hidden;
+        border-radius: 0.75rem 0.75rem 0 0 ;
+
     }
     
 
@@ -153,7 +172,7 @@
         flex-direction: column;
         margin: 1rem 0;
         height: 100%;
-        overflow: hidden;
+        overflow:hidden;
         padding: 0.5rem 0.5rem 0 0.5rem;
     }
     
@@ -173,6 +192,24 @@
         height: 3rem;
         margin: -0.5rem 0 0.5rem 0;
         z-index: 3;
+    }
+
+    #already_voted {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background: #282828;
+        color: white;
+        margin: 0.5rem;
+        padding: 0.5rem;
+        border-radius: 0.75rem;
+    }
+
+    #vote_component {
+        display: flex;
+        flex-direction: row;
+        margin: 0.75rem;
     }
 
     .no_banner {
@@ -197,13 +234,32 @@
 
     .meal_info {
         color: white;
-        font-size: 0.8rem;
+
         margin: 0;
 
     }
 
     .invisible {
         display: none;
+    }
+
+    .tiny {
+        font-size: 0.8rem;
+    }
+
+    .orange_c {
+        color: #FCC219;
+    }
+
+    .slider_frame {
+        display: flex;
+        align-items: center;
+        border-radius: 0.75rem;
+        margin-right: 0.5rem;
+        background-color: #282828;
+        padding: 0.5rem;
+        height: 2rem;
+        width: calc(100vw - 1rem);
     }
 
 
@@ -216,31 +272,34 @@
         </div>
 
 
-        <div id=meal_text><p class="meal_info">Hinzugefügt am {new Date(mealData.date).toLocaleDateString()} von {mealData.authorName.split(" ")[0]}</p>
+        <div id=meal_text><p class="meal_info tiny">Hinzugefügt am {new Date(mealData.date).toLocaleDateString()} von {mealData.authorName.split(" ")[0]}</p>
             <p class="meal_title">
                 {mealData.title}
             </p>
         </div>
         
     </div>
-    <div id="desc_container">
+    <div id="desc_container" bind:this={mealCardDesc}>
         <div id="fffgradient" class={(state) ? "invisible":""}></div>
         {mealData.desc}
     </div>
-    <div id="text_extender" on:click={openCard}>
-        {state ? "Weniger":"Mehr"}
-    </div>
 
-    {#if mealData.rates.length != 0}
-        Score: {calcScore()}
-    {:else}
-        Noch keine Bewertung vorhanden
+
+    {#if descOverflown(mealCardDesc)}
+        <div id="text_extender" on:click={openCard}>
+            {state ? "Weniger":"Mehr"}
+        </div>
     {/if}
+    
+
     {#if checkUserVote()}
         {#if state_edit_vote == false}
-            <br>Du hast bereits bewertet : <span on:click={toggle_edit_mode}>Bearbeiten</span>
+            <div id="already_voted" class="tiny"> 
+                <div>Bereits bewertet.</div>
+                <div class="orange_c" on:click={toggle_edit_mode}>Bearbeiten</div>
+            </div>
         {:else}
-            <br> Bewertung ändern: <input type="number" bind:value={changeInput}/> 
+            <br>Bewertung ändern: <input type="number" bind:value={changeInput}/> 
             <button on:click={changeRate}>Senden</button> 
             <span on:click={toggle_edit_mode}>Abbrechen</span>
         {/if}
@@ -255,8 +314,22 @@
             {/await}
 
         {:else}
-            <br> Bewerten: <input type="number" max="100" bind:value={rateInput}>
-            <button on:click={postRate}>Senden</button>
+            <div id="vote_component">
+                <div class="slider_frame">
+                    <Slider bind:value={rateInput}>
+                        <span style="font-size: 20px;">❤️</span>
+                    </Slider>
+                </div>
+
+                <StyledButton call={postRate} >
+                    Senden
+                </StyledButton>
+
+            
+            </div> 
+            
+
+
         {/if}
 
     {/if}

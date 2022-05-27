@@ -53,14 +53,16 @@
   
 
     #mealcard_holder {
-      background-color: aqua;
+      background-color: white;
       min-height: calc(100vh - 9rem);
+
 
     }
 
     .open {
       height: 100%;
     }
+
 
     .closed {
       height: calc(100vh - 9rem);
