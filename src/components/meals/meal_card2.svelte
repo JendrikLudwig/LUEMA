@@ -20,10 +20,7 @@
     currentUser.subscribe(val => acUser = val);
 
     let sliderInput = [50,100];
-    let rateInput;
-    let changeInput;
     let submit;
-    let state_edit_vote = false;
 
     //Vote State
     let voteInterfaceState; //vote, voted
@@ -46,10 +43,9 @@
     }
 
     function postRate() {
-        // Send a POST request to src/routes/contact.js endpoint
         submit = fetch("/api/rate.json", {
         method: 'POST',
-        body: JSON.stringify({userId: JSON.parse(acUser).id, mealId: mealData.id, value: rateInput}),
+        body: JSON.stringify({userId: JSON.parse(acUser).id, mealId: mealData.id, value: sliderInput[0]}),
         headers: { 'content-type': 'application/json' },
         })
         .then((res) => {
@@ -65,10 +61,9 @@
     }
 
     function changeRate() {
-        // Send a POST request to src/routes/contact.js endpoint
         submit = fetch("/api/rate.json", {
         method: 'PUT',
-        body: JSON.stringify({userId: JSON.parse(acUser).id, mealId: mealData.id, value: changeInput}),
+        body: JSON.stringify({userId: JSON.parse(acUser).id, mealId: mealData.id, value: sliderInput[0]}),
         headers: { 'content-type': 'application/json' },
         })
         .then((res) => {
@@ -86,7 +81,7 @@
     }
 
 
-    function sendVote() {
+    function sendRate() {
         if(checkUserVote()) {
             changeRate()
         } else {
@@ -96,7 +91,6 @@
 
 
     function toggle_edit_mode() {
-        state_edit_vote = !state_edit_vote;
         voteInterfaceState = (voteInterfaceState == "vote") ? "voted" : "vote";
     };
 
@@ -110,8 +104,8 @@
 
 
     if(browser) {
-        changeInput = checkUserVote()?.value;
-        voteInterfaceState = (changeInput) ? "voted" : "vote"
+        sliderInput[0] = checkUserVote()?.value;
+        voteInterfaceState = (sliderInput) ? "voted" : "vote"
     }
 
     function descOverflown(element) {
@@ -287,11 +281,12 @@
 
 <div id="meal_card_container" >
     <div id="meal_banner" class={(imageExists(`../meal_images/${mealData.id}.jpg`)) ? "has_banner" : "no_banner"} style="--Image:url({`../meal_images/${mealData.id}.jpg`})">
+        
         <div id="rate_indicator_container">
             <RateIndicator points={calcScore()} size={"2.5rem"}></RateIndicator>
-        </div>
+        </div>   
 
-
+        
         <div id=meal_text><p class="meal_info tiny">Hinzugefügt am {new Date(mealData.date).toLocaleDateString()} von {mealData.authorName.split(" ")[0]}</p>
             <p class="meal_title">
                 {mealData.title}
@@ -311,69 +306,42 @@
         </div>
     {/if}
 
-    {#if voteInterfaceState === "vote"}
+
+
+
+    {#await submit}
         <div id="vote_component">
-            <div class="slider_frame">
-                <Slider bind:value={rateInput}>
-                    <span style="font-size: 20px;">❤️</span>
-                </Slider>
+                <div class="slider_frame">
+                    <Slider bind:value={sliderInput}>
+                        <span style="font-size: 20px;">🖤</span>
+                    </Slider>
+                </div>
+
+                <StyledButton background_color={"grey"}>
+                    Sendet...
+                </StyledButton>
             </div>
+    {:then}
+        {#if voteInterfaceState === "vote"}
+            <div id="vote_component">
+                <div class="slider_frame">
+                    <Slider bind:value={sliderInput}>
+                        <span style="font-size: 20px;">❤️</span>
+                    </Slider>
+                </div>
 
-            <StyledButton call={postRate} >
-                Senden
-            </StyledButton>
-        </div>
-    {:else if voteInterfaceState === "voted"}
-        <div id="already_voted" class="tiny"> 
-            <div>Bereits bewertet.</div>
-            <div class="orange_c" on:click={toggle_edit_mode}>Bearbeiten</div>
-        </div>
-    {:else}
-        Fehler.
-    {/if}
-    
-
-    {#if checkUserVote()}
-        {#if state_edit_vote == false}
+                <StyledButton call={sendRate} >
+                    Senden
+                </StyledButton>
+            </div>
+        {:else if voteInterfaceState === "voted"}
             <div id="already_voted" class="tiny"> 
                 <div>Bereits bewertet.</div>
                 <div class="orange_c" on:click={toggle_edit_mode}>Bearbeiten</div>
             </div>
         {:else}
-            <br>Bewertung ändern: <input type="number" bind:value={changeInput}/> 
-            <button on:click={changeRate}>Senden</button> 
-            <span on:click={toggle_edit_mode}>Abbrechen</span>
+            Fehler.
         {/if}
-        
-    {:else}
-
-        {#if submit}
-            {#await submit}
-                <p>O</p>
-            {:then res}
-                <pre>{JSON.stringify(res.text, null, 2)}</pre>
-            {/await}
-
-        {:else}
-            <div id="vote_component">
-                <div class="slider_frame">
-                    <Slider bind:value={rateInput}>
-                        <span style="font-size: 20px;">❤️</span>
-                    </Slider>
-                </div>
-
-                <StyledButton call={postRate} >
-                    Senden
-                </StyledButton>
-
-            
-            </div> 
-            
-
-
-        {/if}
-
-    {/if}
-
+    {/await}
 
 </div>
