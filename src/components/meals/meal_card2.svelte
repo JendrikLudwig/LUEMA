@@ -19,10 +19,14 @@
     let acUser;
     currentUser.subscribe(val => acUser = val);
 
+    let sliderInput = [50,100];
     let rateInput;
     let changeInput;
     let submit;
     let state_edit_vote = false;
+
+    //Vote State
+    let voteInterfaceState; //vote, voted
 
     //MealCardDescRef
     let mealCardDesc;
@@ -50,14 +54,13 @@
         })
         .then((res) => {
             if (res.ok) {
+                voteInterfaceState = "voted"
                 return {
                     text:"Bewertung abgegeben."
                 }
             }
-
-            return {
-                text:"Es gab einen Fehler. Bitte versuche es später erneut."
-            }
+            voteInterfaceState = "vote"
+            window.alert("Es gab einen Fehler. Bitte versuche es später erneut.")
         })
     }
 
@@ -70,6 +73,7 @@
         })
         .then((res) => {
             if (res.ok) {
+                voteInterfaceState = "voted"
                 return {
                     text:"Bewertung abgegeben."
                 }
@@ -81,7 +85,20 @@
         })
     }
 
-    function toggle_edit_mode() {state_edit_vote = !state_edit_vote};
+
+    function sendVote() {
+        if(checkUserVote()) {
+            changeRate()
+        } else {
+            postRate()
+        }
+    }
+
+
+    function toggle_edit_mode() {
+        state_edit_vote = !state_edit_vote;
+        voteInterfaceState = (voteInterfaceState == "vote") ? "voted" : "vote";
+    };
 
 
     function imageExists(url) {
@@ -92,7 +109,10 @@
     }
 
 
-    if(browser) changeInput = checkUserVote()?.value;
+    if(browser) {
+        changeInput = checkUserVote()?.value;
+        voteInterfaceState = (changeInput) ? "voted" : "vote"
+    }
 
     function descOverflown(element) {
         if(!element) return false  
@@ -289,6 +309,27 @@
         <div id="text_extender" on:click={openCard}>
             {state ? "Weniger":"Mehr"}
         </div>
+    {/if}
+
+    {#if voteInterfaceState === "vote"}
+        <div id="vote_component">
+            <div class="slider_frame">
+                <Slider bind:value={rateInput}>
+                    <span style="font-size: 20px;">❤️</span>
+                </Slider>
+            </div>
+
+            <StyledButton call={postRate} >
+                Senden
+            </StyledButton>
+        </div>
+    {:else if voteInterfaceState === "voted"}
+        <div id="already_voted" class="tiny"> 
+            <div>Bereits bewertet.</div>
+            <div class="orange_c" on:click={toggle_edit_mode}>Bearbeiten</div>
+        </div>
+    {:else}
+        Fehler.
     {/if}
     
 
