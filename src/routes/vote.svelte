@@ -5,9 +5,11 @@
   import {currentUser} from "../stores/stores.js"
 
   //Components
-  import Card from "../components/util/card.svelte"
+  import PageContainer from "../components/util/page_container.svelte"
   import Navbar from "../components/nav/navbar.svelte";
-  import Slider from '@bulatdashiev/svelte-slider';
+  import MealCard from "../components/meals/meal_card.svelte"
+  import SlimButton from "../components/util/slim_button.svelte"
+
 
   let value;
 
@@ -22,9 +24,7 @@
   let fetchData = undefined;
   $: current_meal = (fetchData) ? fetchData[0] : undefined;
 
-  let rateInput;
-
-
+  
   async function fetchUnvoted() {
     const response = await fetch("api/unrated.json",{
       method: 'POST',
@@ -36,30 +36,6 @@
     })
   }
 
-  function postRate(id, value) {
-        // Send a POST request to src/routes/contact.js endpoint
-        return fetch("/api/rate.json", {
-        method: 'POST',
-        body: JSON.stringify({userId: JSON.parse(user).id, mealId: id, value: value}),
-        headers: { 'content-type': 'application/json' },
-        })
-        .then((res) => {
-            if (res.ok) {
-                return {
-                    text:"Bewertung abgegeben.",
-                    success: true
-                }
-            }
-
-            return {
-                text:"Es gab einen Fehler. Bitte versuche es später erneut.",
-                success: false
-            }
-        })
-    }
-
-
-
     function handleClick() {
       // Now set it to the real fetch promise 
       submit = fetchUnvoted();
@@ -68,30 +44,24 @@
   
 
   function handleSkip() {
+    card_open = false;
     const positon = fetchData.indexOf(current_meal);
     const max_position = fetchData.length - 1;
     if (positon < max_position) current_meal = fetchData[positon + 1]
-    else current_meal = fetchData[0]
-    
+    else current_meal = fetchData[0] 
+  }
+
+
+
+  let card_open = false;
+
+
+  function toggle_card() {
+    card_open = !card_open
   }
 
   async function handleVote() {
-    const ID = current_meal.id;
-    const VALUE = rateInput[0];
-    //Buttons locken
-    //Input Validieren
-    //Value Posten und Antwort abwarten
-    const RESPONSE = await postRate(ID, VALUE)
-    if(RESPONSE.success) {
-      submit = fetchUnvoted();
-    } else {
-
-    }
-
-    console.log(RESPONSE);
-    //Antwort valideren
-    //Bei positiver Antwort: Meal aus Staple löschen & auf nächstes Meal wechsel
-    //Bei Error: Fehler anzeigen
+    submit = fetchUnvoted();
   }
 
 
@@ -105,41 +75,50 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-  :root {
-  --track-bg: black;
-  --progress-bg: #8abdff;
-  --thumb-bg: #5784fd;
-}
-
   :global(html) {
     background-color: #F8F8F8;
-  }
-
-  #page_container {
-      margin: 3rem 0 7rem 0;
-      height: calc(100vh - 12rem);
-  }
-
-  :global(p) {
-    font-family: 'Montserrat', sans-serif;
   }
   
   :global(body) {
     margin: 0 1rem;
+    font-family: 'Montserrat', sans-serif;
+
   }
 
 
-  #test {
+  #mealcard_holder {
+    background-color: white;
+    min-height: calc(100vh - 12rem);
+
+
+  }
+
+  .open {
+    height: 100%;
+  }
+
+
+  .closed {
+    height: calc(100vh - 12rem);
+  }
+
+  #skip_button {
     display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 3rem;
+  }
+  
+
+  .flex_center {
+    display: flex;
+    height: calc(100vh - 9rem);
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
-    border-radius: 0.85rem;
-    width: 10rem;
-    background-color: aqua;
-    height: 2rem;
+    text-align: center;
   }
-
 
 </style>
 
@@ -151,47 +130,32 @@
 
 {#if browser}
   
-    <div id="page_container">
-      <Navbar active=2/>
-      
-  
-      <Card height={"100%"}>
-        <button on:click={ handleClick }>
-          Nachladen
-        </button>
-      {#await submit}
-        lädt...
-      {:then} 
-        {#if current_meal }
-  
-          <p>{current_meal.id}</p>
-          <p>{current_meal.title}</p>
-          <p>{current_meal.date}</p>
-          
-          <div id="test">
-            <Slider bind:value={rateInput}>
-              <span style="font-size: 20px;">❤️</span>
-            </Slider>
-          </div>
-          
-          <button on:click={handleVote}>Send</button>
-  
-          <br>
-          <br>
-          <br>
-          <br>
-          
-          <button on:click={handleSkip} disabled={fetchData.length == 1}>Next</button>
-  
-          
-          
-          
-        {:else}
-          Es gibt nichts zum bewerten.
-        {/if}
-      {/await}
-    </Card>
-  </div>
+  <PageContainer>
+    <Navbar active=2/>
+    
+    {#await submit}
+      lädt...
+    {:then} 
+      {#if current_meal }
+
+        <div id="mealcard_holder" class={(card_open) ? "open" : "closed"}>
+          <MealCard mealData={current_meal} on:toggle={toggle_card} state={card_open} on:onVote={handleVote}/>  
+        </div>
+        
+        <div id="skip_button">
+          <SlimButton background_color={"white"} text_color={"black"} on:click={handleSkip} disabled={fetchData.length == 1}>Überspringen</SlimButton>
+        </div>
+
+      {:else}
+        <div class="flex_center">
+          <p>Alles bewertet!</p>
+          <p>Du hast alle verfügbaren Gerichte bewertet!</p>
+          <p>Schau später nocheinmal vorbei</p>
+          <button>Zurück</button>
+        </div>
+      {/if}
+    {/await}
+  </PageContainer>
 {/if}
 
 

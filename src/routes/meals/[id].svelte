@@ -21,7 +21,7 @@
 
     //Components
     import Navbar from '../../components/nav/navbar.svelte';
-    import MealCard2 from "../../components/meals/meal_card2.svelte"
+    import MealCard from "../../components/meals/meal_card.svelte"
     import PageContainer from "../../components/util/page_container.svelte"
 
     export let mealData;
@@ -81,7 +81,7 @@
 <PageContainer>
   <Navbar active=0/>
   <div id="mealcard_holder" class={(card_open) ? "open" : "closed"}>
-    <MealCard2 mealData={mealData} on:toggle={toggle_card} state={card_open}/>  
+    <MealCard mealData={mealData} on:toggle={toggle_card} state={card_open}/>  
   </div>
 </PageContainer>
 

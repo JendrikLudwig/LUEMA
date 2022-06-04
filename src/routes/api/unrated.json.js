@@ -9,9 +9,12 @@ export const post = async ({request}) => {
     const unrated = meals.filter(y => !ratedIds.includes(y.id))
 
     const response = unrated.map(meal => {
+        const rates = ratings.filter(x => x.mealId == meal.id)
         return {
             ...meal,
-            username: users.find(u => u.id === meal.authorId).name
+            rates,
+            authorName: users.find(u => u.id === meal.authorId).name,
+            
 
         }
     })
