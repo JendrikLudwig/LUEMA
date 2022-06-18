@@ -6,6 +6,8 @@
     //Components
     import Header from "../components/main/header.svelte"
     import TinyButton from "../components/main/tiny_button.svelte"
+    import Button from "../components/util/button.svelte"
+
     import Navbar from "../components/nav/navbar.svelte"
 
     //Icons
@@ -20,8 +22,8 @@
     if(browser && (user == "null" || user == null)) goto("/signin");
 
     function signout(){
-      currentUser.update(() => null);
       window.location.href = "/"
+      currentUser.update(() => null);
     }
     
 </script>
@@ -75,8 +77,8 @@
   </div>
 
   <div>
-      <button on:click={() => goto("/vorschlagen")}>Vorschlagen</button>
-      <button>Meine Vorschläge</button>   
+      <Button on:click={() => goto("/vorschlagen")}>Vorschlagen</Button>
+      <Button>Meine Vorschläge</Button>   
   </div>
 </div>
 

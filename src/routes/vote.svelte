@@ -9,6 +9,8 @@
   import Navbar from "../components/nav/navbar.svelte";
   import MealCard from "../components/meals/meal_card.svelte"
   import SlimButton from "../components/util/slim_button.svelte"
+  import Button from "../components/util/button.svelte"
+
 
 
   let value;
@@ -120,6 +122,86 @@
     text-align: center;
   }
 
+  .title {
+    color: #636261;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+    opacity: 0.75;
+  }
+
+  .secondary {
+    color: #636261;
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin: 1rem 1rem 3rem 1rem;
+    opacity: 0.75;
+
+  }
+
+  #animation_box {
+    display: flex;
+    flex-direction: row;
+  }
+
+
+  #animation_box div{
+    display: flex;
+    height: 1rem;
+    width: 1rem;
+    margin: 0.5rem;
+    background-color: #FCB919;
+    border-radius: 0.2rem;
+  }
+
+
+  @keyframes flickerAnimation {
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-o-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-moz-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+@-webkit-keyframes flickerAnimation{
+  0%   { opacity:1; }
+  50%  { opacity:0; }
+  100% { opacity:1; }
+}
+
+
+  .a1 {
+    -webkit-animation: flickerAnimation 1s infinite;
+    -moz-animation: flickerAnimation 1s infinite;
+    -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
+    animation-delay: 0.1s;
+  }
+
+  .a2 {
+    -webkit-animation: flickerAnimation 1s infinite;
+   -moz-animation: flickerAnimation 1s infinite;
+   -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
+    animation-delay: 0.2s;
+
+  }
+  
+  .a3 {
+    -webkit-animation: flickerAnimation 1s infinite;
+   -moz-animation: flickerAnimation 1s infinite;
+   -o-animation: flickerAnimation 1s infinite;
+    animation: flickerAnimation 1s infinite;
+    animation-delay: 0.3s;
+
+  }
 </style>
 
 
@@ -134,7 +216,13 @@
     <Navbar active=2/>
     
     {#await submit}
-      lädt...
+      <div class="flex_center">
+        <div id="animation_box">
+          <div class="a1"></div>
+          <div class="a2"></div>
+          <div class="a3"></div>
+        </div>
+      </div>
     {:then} 
       {#if current_meal }
 
@@ -148,10 +236,9 @@
 
       {:else}
         <div class="flex_center">
-          <p>Alles bewertet!</p>
-          <p>Du hast alle verfügbaren Gerichte bewertet!</p>
-          <p>Schau später nocheinmal vorbei</p>
-          <button>Zurück</button>
+          <p class="title">Alles bewertet!</p>
+          <p class="secondary">Du hast alle verfügbaren Gerichte bewertet!</p>
+          <Button>Zurück</Button>
         </div>
       {/if}
     {/await}
