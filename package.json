@@ -20,6 +20,7 @@
   },
   "type": "module",
   "dependencies": {
+    "mysql2": "^2.3.3",
     "quill": "^1.3.6"
   }
 }
